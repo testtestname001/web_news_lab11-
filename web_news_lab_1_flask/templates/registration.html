@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Реєстрація</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+  </head>
+  <body>
+    <header>
+      <nav class="navbar">
+        <ul>
+          <li><a href="{{ url_for('index') }}">Головна</a></li>
+          <li><a href="{{ url_for('register') }}">Реєстрація</a></li>
+          <li><a href="{{ url_for('login') }}">Вхід</a></li>
+        </ul>
+        {% if g.user %}
+        <p>Вітаємо, {{ g.user.login }}!</p>
+        {% endif %}
+      </nav>
+      <h1>Реєстрація</h1>
+    </header>
+
+    <main>
+      <p>Це сторінка реєстрації.</p>
+      {% with messages = get_flashed_messages() %} {% if messages %}
+      <ul class="flashes">
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %} {% endwith %}
+      <form class="registration-form" method="post">
+        <div class="form-group">
+          <label for="login">Логін:</label>
+          <input type="text" id="login" name="login" required />
+        </div>
+        <div class="form-group">
+          <label for="password">Пароль:</label>
+          <input type="password" id="password" name="password" required />
+        </div>
+        <button type="submit">Зареєструватися</button>
+      </form>
+    </main>
+
+    <footer>
+      <p>&copy; 2024 Новинний блог.</p>
+    </footer>
+  </body>
+</html>

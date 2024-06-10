@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Новинний блог</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+  </head>
+  <body>
+    <header>
+      <nav class="navbar">
+        <ul>
+          <li><a href="{{ url_for('index') }}">Головна</a></li>
+          {% if g.user %}
+          <p>Вітаємо, {{ g.user.login }}!</p>
+          <li><a href="{{ url_for('logout') }}">Вийти</a></li>
+          {% else %}
+          <li><a href="{{ url_for('register') }}">Реєстрація</a></li>
+          <li><a href="{{ url_for('login') }}">Вхід</a></li>
+          {% endif %}
+        </ul>
+      </nav>
+      <h1>Новинний блог</h1>
+    </header>
+    <main>
+      <!--вікно видалити пост-->
+      <div id="ModalDelPostConfimWindow" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <p>Ви впевнені, що хочете видалити цей пост?</p>
+
+          <button id="confirmBtn">Так</button>
+
+          <button id="cancelBtn">Ні</button>
+        </div>
+      </div>
+
+      {% if g.user %}
+      <div class="new-post-button">
+        <a href="{{ url_for('new_post') }}" class="button">Додати пост </a>
+      </div>
+      {% endif %} {% for post in posts %}
+      <article>
+        <h2>{{ post.title }}</h2>
+        <p class="meta">
+          Автор: <span>{{ post.author }}</span> | Дата та час:
+          <span>{{ post.created_at }}</span>
+        </p>
+        {% if post.image_path %}
+        <img
+          class="post-image"
+          src="/{{ post.image_path }}"
+          alt="Зображення до статті"
+        />
+        {% endif %}
+        <div class="content">
+          <p>{{ post.content }}</p>
+        </div>
+        {% if g.user and (g.user.login == post.author or g.user.login ==
+        'admin') %}
+        <a
+          href="{{ url_for('edit_post', id=post.id) }}"
+          class="buttonchangepost"
+        >
+          Редагувати
+        </a>
+
+        <button
+          type="button"
+          class="button delete"
+          data-post-id="{{ post.id }}"
+        >
+          <img
+            src="{{ url_for('static', filename='del_icon.png') }}"
+            alt="Видалити"
+            style="width: 24px; height: 24px"
+          />
+        </button>
+        {% endif %}
+      </article>
+      {% endfor %}
+    </main>
+
+    <script src="{{ url_for('static', filename='js/delPostModalWindowScript.js') }}"></script>
+
+    <footer>
+      <p>&copy; 2024 Новинний блог.</p>
+    </footer>
+  </body>
+</html>
